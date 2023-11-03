@@ -1,4 +1,5 @@
 const net = require("net");
+const fs = require('fs')
 
 console.log("Logs from your program will appear here!");
 const get_method_path_protocol = (str) => {
@@ -23,14 +24,19 @@ function get_user_agent(user_agent) {
     } else {
         return ""
     }
-  }
+}
+
+const get_file_content = () => {
+    
+}
 const server = net.createServer((socket) => {
 
     socket.on('data', (data) => {
         const lines = data.toString().split('\n')
         const [method, path, protocol] = get_method_path_protocol(lines[0])
         const body = get_body(path)
-        const user_agent=get_user_agent(lines[2])
+        const user_agent = get_user_agent(lines[2])
+        console.log('process',process.argv)
         let response=''
         if (path === "/") {
             response="HTTP/1.1 200 OK\r\n\r\n"
@@ -42,7 +48,6 @@ const server = net.createServer((socket) => {
         else {
             response="HTTP/1.1 404 Not Found\r\n\r\n"
         }
-        console.log(response)
         socket.write(response)
         socket.end()
    })
