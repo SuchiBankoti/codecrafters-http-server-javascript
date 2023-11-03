@@ -15,7 +15,7 @@ const get_body = (path) => {
     for (let i = 2; i < arr.length; i++){
         body.push(arr[i])
     }
-    return body.join("")
+    return body.join("/")
 }
 
 const server = net.createServer((socket) => {
