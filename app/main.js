@@ -62,7 +62,7 @@ const server = net.createServer((socket) => {
             response=`HTTP/1.1 200 OK\r\n\Content-Type: text/plain\r\n\Content-Length: ${body.length}\r\n\r\n${body}`
         } else if (path.startsWith("/user-agent")) {
             response=`HTTP/1.1 200 OK\r\n\Content-Type: text/plain\r\n\Content-Length: ${user_agent.length}\r\n\r\n${user_agent}`
-        } else if (path.startsWith("/files") && method === "GET") {
+        } else if (path.startsWith("/files") && method === "GET" && file_content) {
             response=`HTTP/1.1 200 OK\r\n\Content-Type: application/octet-stream\r\n\Content-Length: ${file_content.length}\r\n\r\n${file_content}`
 
         }
