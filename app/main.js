@@ -17,7 +17,10 @@ const get_body = (path) => {
     }
     return body.join("/")
 }
-
+function get_user_agent(user_agent) {
+    const arr = user_agent.split(":")
+    return arr[1]
+  }
 const server = net.createServer((socket) => {
 
     socket.on('data', (data) => {
@@ -25,13 +28,16 @@ const server = net.createServer((socket) => {
         const [method, path, protocol] = get_method_path_protocol(lines[0])
         console.log('useragent',lines[2])
         console.log('method:', method, "path:", path, "protocol:", protocol)
-        const body=get_body(path)
+        const body = get_body(path)
+        const user_agent=get_user_agent(lines[2])
         console.log('path',path)
         let response=''
         if (path === "/") {
             response="HTTP/1.1 200 OK\r\n\r\n"
         } else if (path.startsWith("/echo/")) {
             response=`HTTP/1.1 200 OK\r\n\Content-Type: text/plain\r\n\Content-Length: ${body.length}\r\n\r\n${body}`
+        } else if (path.startsWith("/user-agent")) {
+            response=`HTTP/1.1 200 OK\r\n\Content-Type: text/plain\r\n\Content-Length: ${user_agent.length}\r\n\r\n${user_agent}`
         }
         else {
             response="HTTP/1.1 404 Not Found\r\n\r\n"
