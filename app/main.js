@@ -27,10 +27,14 @@ function get_user_agent(user_agent) {
     }
 }
 function get_directory_path() {
-    const arr = process.argv.slice(2)
-  const i = arr.indexOf("--directory")
-  const directory_path=arr[i+1]
-  return directory_path
+    const arr = process.argv.slice(2);
+    const i = arr.indexOf("--directory");
+    if (i !== -1 && i + 1 < arr.length) {
+        return arr[i + 1];
+    } else {
+        console.error("Directory path is missing. Please provide a directory using the --directory flag.");
+        process.exit(1);
+    }
 }
     
 const get_file_content = (url) => {
