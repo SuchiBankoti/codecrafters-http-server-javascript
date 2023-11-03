@@ -32,7 +32,7 @@ const server = net.createServer((socket) => {
         }
         console.log(response)
         socket.write(response)
-        // socket.end()
+        socket.end()
    })
 
 
