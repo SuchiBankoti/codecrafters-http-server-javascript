@@ -19,7 +19,7 @@ const get_body = (path) => {
 }
 function get_user_agent(user_agent) {
     const arr = user_agent.split(":")
-    return arr[1]
+    return arr[1].replace(/\s/g, '')
   }
 const server = net.createServer((socket) => {
 
