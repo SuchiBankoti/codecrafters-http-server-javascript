@@ -22,7 +22,8 @@ const server = net.createServer((socket) => {
 
     socket.on('data', (data) => {
         const lines = data.toString().split('\n')
-        const [method,path,protocol]=get_method_path_protocol(lines[0])
+        const [method, path, protocol] = get_method_path_protocol(lines[0])
+        console.log('useragent',lines[2])
         console.log('method:', method, "path:", path, "protocol:", protocol)
         const body=get_body(path)
         console.log('path',path)
