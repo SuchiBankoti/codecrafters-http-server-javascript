@@ -30,7 +30,7 @@ const server = net.createServer((socket) => {
         console.log('method:', method, "path:", path, "protocol:", protocol)
         const body = get_body(path)
         const user_agent=get_user_agent(lines[2])
-        console.log('path',path)
+        console.log('user',user_agent)
         let response=''
         if (path === "/") {
             response="HTTP/1.1 200 OK\r\n\r\n"
