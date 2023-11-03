@@ -51,6 +51,7 @@ const server = net.createServer((socket) => {
 
     socket.on('data', (data) => {
         const lines = data.toString().split('\n')
+        console.log('lines',lines)
         const [method, path, protocol] = get_method_path_protocol(lines[0])
         const body = get_body(path)
         const user_agent = get_user_agent(lines[2])
