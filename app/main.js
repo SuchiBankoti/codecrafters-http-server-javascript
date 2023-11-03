@@ -26,23 +26,26 @@ function get_user_agent(user_agent) {
         return ""
     }
 }
-function get_directory_path() {
-    const arr = process.argv.slice(2);
-    const i = arr.indexOf("--directory");
-    if (i !== -1 && i + 1 < arr.length) {
-        return arr[i + 1];
-    } else {
-        console.error("Directory path is missing. Please provide a directory using the --directory flag.");
-        process.exit(1);
-    }
-}
+
     
 const get_file_content = (url) => {
-    const filename = url.substring(7)
-    const directory_path = get_directory_path()
-    const file_path=path.join(directory_path,filename)
-    const file_content = fs.readFileSync(file_path)
-    return file_content
+    const filename = url.substring(7);
+
+    if (process.argv.length < 4 || process.argv[2] !== '--directory') {
+        console.error('Please provide a directory using "--directory" flag.');
+        return null;
+    }
+
+    const directoryPath = process.argv[3];
+    const file_path = path.join(directoryPath, filename);
+
+    if (!fs.existsSync(file_path)) {
+        console.error('File not found');
+        return null;
+    }
+
+    const file_content = fs.readFileSync(file_path);
+    return file_content;
 }
 const server = net.createServer((socket) => {
 
