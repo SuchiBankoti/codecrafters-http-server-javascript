@@ -47,11 +47,24 @@ const get_file_content = (url) => {
     const file_content = fs.readFileSync(file_path);
     return file_content;
 }
+const write_file_content = (body, url) => {
+    const filename = url.substring(7);
+
+    if (process.argv.length < 4 || process.argv[2] !== '--directory') {
+        console.error('Please provide a directory using "--directory" flag.');
+        return null;
+    }
+
+    const directoryPath = process.argv[3];
+    const file_path = path.join(directoryPath, filename);
+    fs.writeFileSync(file_path,body)
+}
 const server = net.createServer((socket) => {
 
     socket.on('data', (data) => {
         const lines = data.toString().split('\n')
-        console.log('lines',lines[lines.length-1])
+        console.log('lines', lines[lines.length - 1])
+        const file_tobewritten=lines[lines.length-1]
         const [method, path, protocol] = get_method_path_protocol(lines[0])
         const body = get_body(path)
         const user_agent = get_user_agent(lines[2])
@@ -65,7 +78,10 @@ const server = net.createServer((socket) => {
             response=`HTTP/1.1 200 OK\r\n\Content-Type: text/plain\r\n\Content-Length: ${user_agent.length}\r\n\r\n${user_agent}`
         } else if (path.startsWith("/files") && method === "GET" && file_content) {
             response=`HTTP/1.1 200 OK\r\n\Content-Type: application/octet-stream\r\n\Content-Length: ${file_content.length}\r\n\r\n${file_content}`
-
+         
+        } else if (path.startsWith("/files") && method === "POST") {
+            write_file_content(file_tobewritten,path)
+            response="HTTP/1.1 201 Created\r\n\r\n"
         }
         else {
             response="HTTP/1.1 404 Not Found\r\n\r\n"
