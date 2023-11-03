@@ -1,4 +1,5 @@
 const net = require("net");
+const { join } = require("path");
 
 console.log("Logs from your program will appear here!");
 const get_method_path_protocol = (str) => {
@@ -9,8 +10,12 @@ const get_method_path_protocol = (str) => {
     return [method,path,protocol]
 }
 const get_body = (path) => {
-    const body = path.split("/")
-    return body[2]
+    const arr = path.split("/")
+    const body=[]
+    for (let i = 2; i < arr.length; i++){
+        body.push(arr[i])
+    }
+    return body.join("")
 }
 
 const server = net.createServer((socket) => {
@@ -24,8 +29,8 @@ const server = net.createServer((socket) => {
         let response=''
         if (path === "/") {
             response="HTTP/1.1 200 OK\r\n\r\n"
-        } else if (path.startsWith("/echo")) {
-            response=`HTTP/1.1 200 OK\r\n\r\nContent-Type: text/plain\r\n\r\nContent-Length: ${body.length}\r\n\r\n${body}`
+        } else if (path.startsWith("/echo/")) {
+            response=`HTTP/1.1 200 OK\r\n\Content-Type: text/plain\r\n\Content-Length: ${body.length}\r\n\r\n${body}`
         }
         else {
             response="HTTP/1.1 404 Not Found\r\n\r\n"
