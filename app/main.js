@@ -14,7 +14,14 @@ const server = net.createServer((socket) => {
         const lines = data.toString().split('\n')
         const [method,path,protocol]=get_method_path_protocol(lines[0])
         console.log('method:', method, "path:", path, "protocol:", protocol)
-        socket.write("HTTP/1.1 200 OK\r\n\r\n")
+        let response=''
+        if (path === "/") {
+            response="HTTP/1.1 200 OK\r\n\r\n"
+        } else {
+            response="HTTP/1.1 404 Not Found\r\n\r\n"
+        }
+        
+        socket.write(response)
         socket.end()
    })
 
